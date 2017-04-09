@@ -1,4 +1,4 @@
-# Go stellar wallet for windows and linux
+# Go custom http get/post
 
 *Description: custom http get/post interface*
 
