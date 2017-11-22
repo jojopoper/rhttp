@@ -61,20 +61,21 @@ func (ths *RClient) GetProxyClient(timeout int, proxyIP, proxyPort string, auth 
 	if auth != nil {
 		author = auth[0]
 	}
-	dialer, err := proxy.SOCKS5("tcp", proxyurl, author,
-		&net.Dialer{
-			Timeout:   time.Duration(ths.timeout) * time.Second,
-			KeepAlive: 30 * time.Second,
-		},
-	)
+	// dialer, err := proxy.SOCKS5("tcp", proxyurl, author,
+	// 	&net.Dialer{
+	// 		Timeout:   time.Duration(ths.timeout) * time.Second,
+	// 		KeepAlive: 30 * time.Second,
+	// 	},
+	// )
+	dialer, err := proxy.SOCKS5("tcp", proxyurl, author, proxy.Direct)
 
 	if err != nil {
 		return nil, fmt.Errorf(" ** Socket5ProxyClient() Error\r\n\tproxy.SOCKS5: %s", err)
 	}
 
 	transport := &http.Transport{
-		Proxy: nil,
-		Dial:  dialer.Dial,
+		// Proxy: nil,
+		Dial: dialer.Dial,
 		ResponseHeaderTimeout: time.Duration(ths.timeout) * time.Second,
 		TLSHandshakeTimeout:   time.Duration(ths.timeout) * time.Second,
 	}

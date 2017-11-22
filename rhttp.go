@@ -197,8 +197,7 @@ func (ths *CHttp) decode(resp *http.Response, retType ReturnType) (interface{}, 
 		}
 		return result, nil
 	case ReturnString:
-		result := string(body)
-		return result, nil
+		return string(body), nil
 	case ReturnSliceByte:
 		return body, nil
 	case ReturnCustomType:
