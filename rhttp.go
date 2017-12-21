@@ -112,6 +112,42 @@ func (ths *CHttp) ClientPostJSON(address string, retType ReturnType, data string
 	return ths.decode(resp, retType)
 }
 
+// ClientPostFormWithHeader 使用 client post form with header
+func (ths *CHttp) ClientPostFormWithHeader(address string, retType ReturnType, data string, header map[string]string) (ret interface{}, err error) {
+	ths.request, err = http.NewRequest("POST", address, strings.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	for k, v := range header {
+		ths.request.Header.Set(k, v)
+	}
+	ths.request.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	resp, err := ths.client.Do(ths.request)
+	if err != nil {
+		ths.client = ths.GetClient(ths.timeout)
+		return nil, fmt.Errorf("[ CHttp:ClientPostFormWithHeader ] Has error:\r\n%+v", err)
+	}
+	return ths.decode(resp, retType)
+}
+
+// ClientPostJsonWithHeader 使用 client post json with header
+func (ths *CHttp) ClientPostJsonWithHeader(address string, retType ReturnType, data string, header map[string]string) (ret interface{}, err error) {
+	ths.request, err = http.NewRequest("POST", address, strings.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	for k, v := range header {
+		ths.request.Header.Set(k, v)
+	}
+	ths.request.Header.Set("Content-Type", "application/json")
+	resp, err := ths.client.Do(ths.request)
+	if err != nil {
+		ths.client = ths.GetClient(ths.timeout)
+		return nil, fmt.Errorf("[ CHttp:ClientPostJsonWithHeader ] Has error:\r\n%+v", err)
+	}
+	return ths.decode(resp, retType)
+}
+
 // ClientConnGet 通过Http client connection获取
 func (ths *CHttp) ClientConnGet(addr string, header map[string]string) (err error) {
 	ths.request, err = http.NewRequest("GET", addr, nil)
